@@ -19,6 +19,7 @@ class Pylos
 		System.out.println("Welcome to Pylos!");
 		System.out.println("Place move syntax: place <cell> [r:<cell>[:<cell>]]");
 		System.out.println("Raise move syntax: raise <cell> <cell> [r:<cell>[:<cell>]]");
+		System.out.println("View score of move syntax: score [place <cell>/raise <cell> <cell>] [r:<cell>[:<cell>]");
 		// Ask for number of human players
 		int numPlayers = -1;
 		do

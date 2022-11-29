@@ -466,6 +466,12 @@ class Board
 			}
 			else if (moveComponents.length == 3)
 				return true;
+		}else if(moveComponents[0].equals("score")){
+			if(moveComponents.length == 1){
+				return true;
+			}else{
+				return isValidMove(move.substring("score".length()+1), player);
+			}
 		}
 		return false;
 	}

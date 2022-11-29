@@ -3,6 +3,11 @@
 *	@version 1.0
 **/
 
+
+// Try to implement "score [place a1 / raise a1 / etc.]" which will display the score of the board based on that move
+// Implement a separate board with different weights and a minimax with a different search depth
+// Figure out infinite loop
+
 import java.util.*;
 
 class Player
@@ -63,7 +68,23 @@ class Player
 				System.out.print("Invalid move, enter again: ");
 				move = scanner.nextLine();
 			}
-			board.move(move, this);
+			if(move.equals("score")){
+				System.out.print("Score is: ");
+				System.out.println(board.evaluateBoard(this, otherPlayer));
+				System.out.println("(Negative score favors white, positive favors black.)");	
+				move(board, scanner, otherPlayer);
+			}
+			else if(move.contains("score")){
+				System.out.print("Score is: ");
+				String moveToGuess = move.substring("score".length()+1);
+				board.move(moveToGuess, this);
+				System.out.println(board.evaluateBoard(this, otherPlayer));
+				System.out.println("(Negative score favors white, positive favors black.)");
+				board.undoMove(moveToGuess, this);
+				move(board, scanner, otherPlayer);
+			}else{
+				board.move(move, this);
+			}
 		}
 		else if (getPlayerType() == AI)
 		{
