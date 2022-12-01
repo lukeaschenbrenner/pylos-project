@@ -5,15 +5,16 @@
 
 import java.util.*;
 
-class Minimax // implements AIModel
+class AltMiniMax  //implements AIModel
 {
 	public String toString(){
-		return "MiniMax";
+		return "Alternate Minimax";
 	}
 	/**
 	*	Feel free to modify this value
 	**/
-	public static final int SEARCH_DEPTH = 5;
+	//public static final int SEARCH_DEPTH = 5;
+	public static final int SEARCH_DEPTH = 6;
 	
 	private static String bestMove = "";
 	

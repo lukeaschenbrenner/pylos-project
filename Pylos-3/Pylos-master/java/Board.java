@@ -10,12 +10,7 @@ class Board
 	public static final int EMPTY_SPHERE = 0;
 	public static final int BLACK_SPHERE = 1;
 	public static final int WHITE_SPHERE = 2;
-	
-	/**
-	*	These are the weights for the evaluation function
-	**/
-	private static final int SPHERES_LEFT_WEIGHT = 2;
-	private static final int CLIMBING_WEIGHT = 3;
+	ScoringEval evaluator;
 	
 	private int[] board;
 	private int[] rowOffsetTable = {0, 4, 8, 12, 16, 19, 22, 25, 27, 29};
@@ -36,6 +31,10 @@ class Board
 		initCellsBelow();
 		initCellsAbove();
 		initCheckSquares();
+		evaluator = new ScoringEval(this, 2, 3);
+	}
+	public int evaluateBoard(Player p1, Player p2){
+		return evaluator.evaluateBoard(p1, p2);
 	}
 	
 	/**
@@ -730,40 +729,9 @@ class Board
 		board[getCellIndex(addr)] = type;
 	}
 	
-	/**
-	*	The evaluation function for the board. Used by the minimax class to determine the favourability of the board.
-	*	A positive value indicates that the board favours black, with negative favouring white. The greater the magnitude,
-	*	the greater the favourability.
-	*	@param p1 a reference to player 1
-	*	@param p2 a reference to player 2
-	*	@return an integer "score" for the board
-	**/
-	public int evaluateBoard(Player p1, Player p2)
-	{
-		Player black, white;
-		
-		int score = 0;
-		if (p1.getColour() == Board.BLACK_SPHERE)
-		{
-			black = p1;
-			white = p2;
-		}
-		else
-		{
-			black = p2;
-			white = p1;
-		}
-		
-		score += SPHERES_LEFT_WEIGHT * (black.getNumSpheres() - white.getNumSpheres());
-		for (int level = 0; level < 4; level++)
-		{
-			score += CLIMBING_WEIGHT * (level + 1) * countSpheresOnLevel(level, black);
-			score -= CLIMBING_WEIGHT * (level + 1) * countSpheresOnLevel(level, white);
-		}
-		return score;
-	}
+
 	
-	private int countSpheresOnLevel(int level, Player player)
+	int countSpheresOnLevel(int level, Player player)
 	{
 		int offset = 0;
 		for (int i = 0; i < level; i++)

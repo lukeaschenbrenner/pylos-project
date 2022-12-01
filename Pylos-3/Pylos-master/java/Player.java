@@ -4,16 +4,21 @@
 **/
 
 
-// Try to implement "score [place a1 / raise a1 / etc.]" which will display the score of the board based on that move
+//TODO
+//DONE:  Try to implement "score [place a1 / raise a1 / etc.]" which will display the score of the board based on that move
 // Implement a separate board with different weights and a minimax with a different search depth
-// Figure out infinite loop
+// Figure out infinite loop (when search depth is low)
 
+// Output score and current game status to file!!!
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 class Player
 {
-	public static final int HUMAN = 1;
-	public static final int AI = 2;
+	public static final int HUMAN = -1;
+	//public static final int AI = 2;
 	
 	private int playerType;
 	private int numSpheres;
@@ -86,9 +91,24 @@ class Player
 				board.move(move, this);
 			}
 		}
-		else if (getPlayerType() == AI)
+		else
 		{
-			String bestMove = Minimax.findMove(board, this, otherPlayer);
+
+			Class<?> aiModel = Pylos.aiModels.get(getPlayerType());
+			Method m = null;
+			try {
+				m = aiModel.getMethod("findMove", Board.class, Player.class, Player.class);
+			} catch (NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+			String bestMove = null;
+			try {
+				bestMove = (String) m.invoke(null, board, this, otherPlayer);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			//String bestMove = aiModel.findMove(board, this, otherPlayer);
+			
 			if (bestMove.equals(""))
 				System.out.println("Could not find move");
 			else
